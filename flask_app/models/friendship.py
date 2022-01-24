@@ -1,3 +1,4 @@
+from queue import Empty
 from flask_app.config.mysqlconnection import connectToMySQL
 
 from flask_app.models import user
@@ -28,3 +29,13 @@ class Friendship:
             }
             friendships.append( cls( friendship_data ) )
         return friendships
+
+    @classmethod
+    def exist_friendship(cls,data):
+        query = "SELECT *  FROM users inner join friendships on users.id = friendships.user_id inner join users as friends on friends.id = friendships.friend_id where users.id=%(user_id)s and friends.id=%(friend_id)s or users.id=%(friend_id)s and friends.id=%(user_id)s;"
+        results = connectToMySQL('friendships_schema').query_db(query,data)
+        print(results)
+        if len(results) == 0:
+          return False
+        else:
+          return True

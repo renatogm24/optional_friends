@@ -17,7 +17,9 @@ def create():
         "user_id":request.form['user_id'],
         "friend_id":request.form['friend_id'],
     }
-    friendship.Friendship.save(data)
+    print(friendship.Friendship.exist_friendship(data))
+    if not friendship.Friendship.exist_friendship(data):
+      friendship.Friendship.save(data)
     return redirect('/')
 
 @app.route('/users/add_user',methods=['POST'])
